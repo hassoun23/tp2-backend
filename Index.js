@@ -1,13 +1,11 @@
-const Manager = require('./manager');
-const manager = new Manager();
+const ManagerProduct = require('./manager.js');
+const manager = new ManagerProduct();
 
-let user = {
-	first_name: 'John',
-	last_name: 'Doe',
-	username: 'John Smith',
-	age: 36,
-	mail: 'john@hotmail.com',
+let producto = {
+	title: 'Calculadora',
+	price: 234.56,
+	thumbnail:
+		'https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png',
 };
 
-manager.createUser(user).then((result) => console.log(result));
-manager.findAll().then((result) => console.log(result));
+manager.createProduct(producto).then((result) => console.log(result));

@@ -1,100 +1,96 @@
 const fs = require('fs');
-const pathToFile = './users.json';
+const pathToFile = './productos.txt';
 
-class Manager {
-	createUser = async (user) => {
-		//Validate user
-		if (!user.first_name || !user.username || !user.mail)
-			return { status: 'error', message: 'missing fields' };
+class ManagerProduct {
+	createProduct = async (producto) => {
+		if (!producto.title || !producto.price || !producto.thumbnail)
+			return {
+				status: 'error',
+				message: 'no se han ingresado todos los campos',
+			};
 		try {
 			if (fs.existsSync(pathToFile)) {
 				let data = await fs.promises.readFile(pathToFile, 'utf-8');
-				let users = JSON.parse(data);
-				let id = users[users.length - 1].id + 1;
-				user.id = id;
-				users.push(user);
-				await fs.promises.writeFile(pathToFile, JSON.stringify(users, null, 2));
-				return { status: 'success', message: 'Usuario creado' };
-			} else {
-				user.id = 1;
+				let productos = JSON.parse(data);
+				let id = productos[productos.length - 1].id + 1;
+				producto.id = id;
+				productos.push(producto);
 				await fs.promises.writeFile(
 					pathToFile,
-					JSON.stringify([user], null, 2)
+					JSON.stringify(productos, null, 2)
 				);
-				return { status: 'success', message: 'Usuario creado' };
+				return {
+					status: 'success',
+					message: `Product ${producto.title} added successfully`,
+				};
+			} else {
+				producto.id = 1;
+				await fs.promises.writeFile(
+					pathToFile,
+					JSON.stringify([producto], null, 2)
+				);
+				return {
+					status: 'success',
+					message: `Product ${producto.title} added successfully`,
+				};
 			}
 		} catch (err) {
 			return { status: 'error', message: err.message };
 		}
 	};
 
-	findAll = async () => {
+	getById = async (id) => {
+		if (!id) return { status: 'error', message: 'favor ingresar ID' };
 		if (fs.existsSync(pathToFile)) {
-			let data = await fs.readFile(pathToFile, 'utf-8');
-			let users = JSON.parse(data);
-			return { status: 'success', message: users };
+			let data = await fs.promises.readFile(pathToFile, 'utf-8');
+			let productos = JSON.parse(data);
+			let producto = productos.find((producto) => producto.id === id);
+			if (producto) return { status: 'success', message: producto };
+			return { status: 'error', message: 'null' };
 		} else {
 			return { status: 'error', message: err.message };
 		}
 	};
 
-	findById = async (id) => {
+	getAll = async () => {
 		if (fs.existsSync(pathToFile)) {
-			let data = await fs.readFile(pathToFile, 'utf-8');
-			let users = JSON.parse(data);
-			let user = users.find((user) => user.id === id);
-			if (user) return { status: 'success', message: user };
-			return { status: 'error', message: 'usuario no encontrado' };
+			let data = await fs.promises.readFile(pathToFile, 'utf-8');
+			let productos = JSON.parse(data);
+			return { status: 'success', message: productos };
 		} else {
 			return { status: 'error', message: err.message };
 		}
 	};
-
-	updateUser = async (id, updateUser) => {
+	deleteById = async (id) => {
+		if (!id) return { status: 'error', message: 'favor ingresar ID' };
 		if (fs.existsSync(pathToFile)) {
-			let data = await fs.readFile(pathToFile, 'utf-8');
-			let users = JSON.parse(data);
-			let newUsers = users.map((user) => {
-				if (user.id === id) {
-					updateUser.id = id;
-					return updateUser;
-				} else {
-					return user;
-				}
-			});
+			let data = await fs.promises.readFile(pathToFile, 'utf-8');
+			let productos = JSON.parse(data);
+			let newProductos = productos.filter((producto) => producto.id !== id);
 			await fs.promises.writeFile(
 				pathToFile,
-				JSON.stringify(newUsers, null, 2)
+				JSON.stringify(newProductos, null, 2)
 			);
-			return { status: 'success', message: 'usuario actualizado' };
+			return { status: 'success', message: 'Product deleted successfully' };
 		} else {
 			return { status: 'error', message: err.message };
 		}
 	};
 
-	deleteUser = async (id) => {
+	deleteAll = async () => {
 		if (fs.existsSync(pathToFile)) {
-			let data = await fs.readFile(pathToFile, 'utf-8');
-			let users = JSON.parse(data);
-			let newUsers = users.filter((user) => user.id !== id);
+			let data = await fs.promises.readFile(pathToFile, 'utf-8');
+			let productos = JSON.parse(data);
+			let newProductos = productos.filter((producto) => producto.length);
 			await fs.promises.writeFile(
 				pathToFile,
-				JSON.stringify(newUsers, null, 2)
+				JSON.stringify(newProductos, null, 2)
 			);
-			return { status: 'success', message: 'usuario eliminado' };
+			return { status: 'success', message: 'Products deleted successfully' };
 		} else {
 			return { status: 'error', message: err.message };
-		}
-	};
-
-	deleteAll = () => {
-		try {
-			let data = JSON.stringify([], null, 2);
-			fs.writeFileSync(this.archivo, data);
-		} catch (error) {
-			console.log(`No existe el archivo ${this.archivo}`);
 		}
 	};
 }
 
-module.exports = Manager;
+module.exports = ManagerProduct;
