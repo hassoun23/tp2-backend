@@ -21,6 +21,8 @@ app.get('/productosrandom', (request, response) => {
 	contenedor
 		.getAll()
 		.then((prod) =>
-			response.menssage(prod[Math.floor(Math.random() * prod.length)])
+			response.send(
+				prod.message[Math.floor(Math.random() * prod.message.length)]
+			)
 		);
 });

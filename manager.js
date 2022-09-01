@@ -53,12 +53,16 @@ class ManagerProduct {
 	};
 
 	getAll = async () => {
-		if (fs.existsSync(pathToFile)) {
-			let data = await fs.promises.readFile(pathToFile, 'utf-8');
-			let productos = JSON.parse(data);
-			return { status: 'success', message: productos };
-		} else {
-			return { status: 'error', message: err.message };
+		try {
+			if (fs.existsSync(pathToFile)) {
+				let data = await fs.promises.readFile(pathToFile, 'utf-8');
+				let productos = JSON.parse(data);
+				return { status: 'success', message: productos };
+			} else {
+				return { status: 'error', message: err.message };
+			}
+		} catch (err) {
+			return { status: 'error', producto: error.message };
 		}
 	};
 	deleteById = async (id) => {
