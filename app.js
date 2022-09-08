@@ -1,28 +1,10 @@
-const ManagerProduct = require('./manager.js');
-
 const express = require('express');
-
 const app = express();
+const Router = express.Router();
+const productRouter = require('./Routes/productRouter');
 
-const contenedor = new ManagerProduct('productos.txt');
+const server = app.listen(8080, () => console.log('server up!'));
 
-const server = app.listen(8080, () => console.log('Server Up'));
-server.on('error', (error) => console.log(`Error en servidor ${error}`));
-
-app.get('/', (request, response) => {
-	response.send('<h1>Bienvenidos al servidor express</h1>');
-});
-
-app.get('/productos', (request, response) => {
-	contenedor.getAll().then((prod) => response.send(prod));
-});
-
-app.get('/productosrandom', (request, response) => {
-	contenedor
-		.getAll()
-		.then((prod) =>
-			response.send(
-				prod.message[Math.floor(Math.random() * prod.message.length)]
-			)
-		);
-});
+app.use(express.json());
+app.use('/', express.static('public'));
+app.use('./api/products', productRouter);

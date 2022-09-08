@@ -1,0 +1,68 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	text-decoration: none;
+}
+
+html {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: bold;
+
+	font-size: 16px;
+}
+
+.formulario {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	margin-top: 1rem;
+}
+
+.form legend {
+	font-size: 3rem;
+	margin: 0 auto 4rem;
+}
+
+.form {
+	flex: 0 0 auto;
+	width: 50vw;
+	margin: 0 auto;
+	border: solid 1px grey;
+	justify-content: center;
+	align-items: center;
+	height: auto;
+	font-size: 1.5rem;
+	font-weight: 100;
+	padding: 2rem;
+	background-color: bisque;
+}
+
+.form input {
+	border: none;
+	border-bottom: solid 1px;
+	outline: none;
+	text-align: left;
+}
+
+.form-group {
+	align-self: center;
+	width: 100%;
+	margin: 0 auto;
+	text-align: left;
+	justify-content: center;
+	align-items: center;
+}
+
+.form .form-button input {
+	font-size: 1rem;
+	border: solid 1px;
+	padding: 0.5rem 1rem;
+	background-color: azure;
+	cursor: pointer;
+}

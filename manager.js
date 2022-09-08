@@ -1,5 +1,5 @@
 const fs = require('fs');
-const pathToFile = './productos.txt';
+const pathToFile = './productos.json';
 
 class ManagerProduct {
 	createProduct = async (producto) => {
@@ -94,6 +94,16 @@ class ManagerProduct {
 		} else {
 			return { status: 'error', message: err.message };
 		}
+	};
+	update = (id, productos) => {
+		id = parseInt(id);
+		let newProductos = productos.map((item) => {
+			if (item.id === id) {
+				return { id, ...productos };
+			} else return item;
+		});
+		productos = newProductos;
+		return this.getById(id);
 	};
 }
 
