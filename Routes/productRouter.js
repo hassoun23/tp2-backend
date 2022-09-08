@@ -19,8 +19,9 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
 	if (!req.body.title || !req.body.price || !req.body.thumbnail)
 		return res.send({ error: 'data is required' });
-	let data = manager.createProduct(req.body);
-	res.send(data);
+	let data = manager.createProduct(req.body).then((prod) => {
+		res.send({ status: 'Success', result: prod });
+	});
 });
 
 router.delete('/:id', (req, res) => {
