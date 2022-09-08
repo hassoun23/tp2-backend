@@ -5,8 +5,9 @@ const ManagerProduct = require('../manager.js');
 const manager = new ManagerProduct('productos.json');
 
 router.get('/', (req, res) => {
-	const productos = manager.getAll();
-	res.send({ status: 'Success', result: productos });
+	const productos = manager.getAll().then((prod) => {
+		res.send({ status: 'Success', result: prod });
+	});
 });
 
 router.get('/:id', (req, res) => {
