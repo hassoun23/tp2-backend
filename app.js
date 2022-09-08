@@ -7,4 +7,4 @@ const server = app.listen(8080, () => console.log('server up!'));
 
 app.use(express.json());
 app.use('/', express.static('public'));
-app.use('./api/productos', productRouter);
+app.use('/api/productos', productRouter);
