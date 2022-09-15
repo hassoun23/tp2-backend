@@ -11,9 +11,13 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-	let data = manager.getById(req.params.id);
-	if (!data) return res.send({ error: 'product was not found' });
-	res.send(data);
+	manager
+		.getById(Number(req.params.id))
+		.then((data) =>
+			data
+				? res.status(200).send(data)
+				: res.status(404).send({ error: 'Product was not found' })
+		);
 });
 
 router.post('/', (req, res) => {
@@ -25,16 +29,23 @@ router.post('/', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-	const data = manager.deleteById(req.params.id);
-	res.send(data);
+	manager
+		.deleteById(Number(req.params.id))
+		.then((result) =>
+			result
+				? res.status(200).send(`Product ${req.params.id} deleted`)
+				: res.status(404).send({ error: 'Product was not found' })
+		);
 });
 
 router.put('/:id', (req, res) => {
-	if (!req.body.title || !req.body.price || !req.body.thumbnail)
-		return res.send({ error: 'data is required' });
-	let data = manager.update(req.params.id, req.body);
-	if (!data) return res.send({ error: 'product was not found' });
-	res.send(data);
+	manager
+		.updateProduct(req.params.id - 1, req.body)
+		.then((result) =>
+			result
+				? res.status(200).send(`product ${req.params.id} was updated`)
+				: res.status(404).send({ error: 'Product was not found' })
+		);
 });
 
 module.exports = router;

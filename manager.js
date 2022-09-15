@@ -95,15 +95,26 @@ class ManagerProduct {
 			return { status: 'error', message: err.message };
 		}
 	};
-	update = (id, productos) => {
-		id = parseInt(id);
-		let newProductos = productos.map((item) => {
-			if (item.id === id) {
-				return { id, ...productos };
-			} else return item;
-		});
-		productos = newProductos;
-		return this.getById(id);
+	updateProduct = async (id, updatedUser) => {
+		//Validation
+		if (!id) return { status: 'error', message: 'Id required' };
+		if (fs.existsSync(pathToFile)) {
+			let data = await fs.promises.readFile(pathToFile, 'utf-8');
+			let productos = JSON.parse(data);
+			let newProductos = productos.map((user) => {
+				if (user.id === id) {
+					updatedUser.id = id;
+					return updatedUser;
+				} else return user;
+			});
+			await fs.promises.writeFile(
+				pathToFile,
+				JSON.stringify(newProductos, null, 2)
+			);
+			return { status: 'success', message: 'User updated!' };
+		} else {
+			return { status: 'error', message: err.message };
+		}
 	};
 }
 
